@@ -62,7 +62,7 @@ def kelvin_to_celsius(k):
     return round(c, 2)
 
 
-openai.api_key = "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"
+openai.api_key = "hidden-open-ai-api-key"
 
 messages = [
     {"role": "system", "content": "You are a helpful and kind AI Assistant."},
