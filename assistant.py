@@ -10,6 +10,7 @@ from ecapture import ecapture as ec
 import wolframalpha
 import json
 import requests
+import openai
 
 print('Loading your AI personal assistant')
 
@@ -60,6 +61,23 @@ def kelvin_to_celsius(k):
     c = k - 273.15
     return round(c, 2)
 
+
+openai.api_key = "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"
+
+messages = [
+    {"role": "system", "content": "You are a helpful and kind AI Assistant."},
+]
+
+
+def chatbotai(input):
+    if input:
+        messages.append({"role": "user", "content": input})
+        chat = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo", messages=messages
+        )
+        reply = chat.choices[0].message.content
+        messages.append({"role": "assistant", "content": reply})
+        return reply
 
 if __name__ == '__main__':
 
@@ -174,16 +192,17 @@ if __name__ == '__main__':
         elif 'ask' in statement:
             speak('I can answer to computational and geographical questions and what question do you want to ask now')
             question = takeCommand()
-            app_id = "R2K75H-7ELALHR35X"
-            client = wolframalpha.Client('R2K75H-7ELALHR35X')
-            res = client.query(question)
-            answer = next(res.results).text
+            # app_id = "R2K75H-7ELALHR35X"
+            # client = wolframalpha.Client('R2K75H-7ELALHR35X')
+            # res = client.query(question)
+            # answer = next(res.results).text
+            answer = chatbotai(question)
             speak(answer)
             print(answer)
 
 
-        elif "switch off" in statement or "shut down" in statement:
-            speak("Ok , your pc will log off in 10 sec make sure you exit from all applications")
-            subprocess.call(["shutdown", "/l"])
+        elif "switch off" in statement or "shut down" in statement or "shutdown" in statement:
+            speak("Ok , your pc will shut down now")
+            subprocess.call(["shutdown", '/s', '/t', '0'])
 
 time.sleep(3)
